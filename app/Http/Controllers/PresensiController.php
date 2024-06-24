@@ -146,6 +146,9 @@ class PresensiController extends Controller
         $fileName = $formatName.".png";
         $file = $folderPath . $fileName;
 
+        $datasiswa = DB::table('siswa')->where('nisn',$nisn)->first();
+        $no_hp = $datasiswa->no_hp;
+
         if($radius > $lok_sekolah->radius){
             echo "error|Maaf Anda Berada diluar radius, Anda berada $radius meter dari titik absen, radius yang di izinkan harus kurang dari $lok_sekolah->radius meter|radius";
         } else{
@@ -162,6 +165,27 @@ class PresensiController extends Controller
                     if($update){
                         echo "success|Absen Berhasil, Hati-hati dijalan!|out";
                         Storage::put($file, $image_base64);
+
+                        $curl = curl_init();
+
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => 'Terima Kasih Sudah Melakukan Absen Pulang, '.$datasiswa->nama_siswa.' melakukan Absen pada Jam '.$jam ,'number' => $no_hp,'file_dikirim'=>''),
+                    ));
+
+                    $response = curl_exec($curl);
+
+                    curl_close($curl);
+                    // echo $response;
+
+
                     }else{
                         echo "error|Maaf Gagal Absen, Hubungi Tim IT|out";
                     }
@@ -185,6 +209,26 @@ class PresensiController extends Controller
                 if($simpan){
                     echo "success|Absen Berhasil, Selamat Belajar!|in";
                     Storage::put($file, $image_base64);
+
+                    $curl = curl_init();
+
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => 'Terima Kasih Sudah Melakukan Absen Masuk, '.$datasiswa->nama_siswa.' melakukan Absen pada Jam '.$jam ,'number' => $no_hp,'file_dikirim'=>''),
+                    ));
+
+                    $response = curl_exec($curl);
+
+                    curl_close($curl);
+                    // echo $response;
+
                 }else{
                     echo "error|Maaf Gagal Absen, Hubungi Tim IT|out";
                 }
