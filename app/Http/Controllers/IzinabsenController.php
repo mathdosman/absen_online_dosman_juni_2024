@@ -60,11 +60,19 @@ class IzinabsenController extends Controller
             $query->where('status_approved',$request->status_approved);
         }
 
+        if(!empty($request->kode_kelas)){
+            $query->where('siswa.kode_kelas',$request->kode_kelas);
+        }
+
 
         $query -> orderBy('tgl_izin_dari','desc');
         $izinsakit = $query->paginate(50);
         $izinsakit -> appends($request -> all());
-        return view('ajuan.prosesajuan',compact('izinsakit'));
+
+        $lokasi = DB::table('lokasi')->orderBy('kode_lokasi')->get();
+        $kelas = DB::table('kelas')->orderBy('kode_kelas')->get();
+
+        return view('ajuan.prosesajuan',compact('izinsakit','kelas'));
 
     }
 

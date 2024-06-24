@@ -18,32 +18,17 @@
   </div>
 @endsection
 @section('content')
-{{-- @php
+@php
 $tgl_indo = tgl_indo(date('Y-m-d'));
-@endphp --}}
-<div class="page-header d-print-none">
-    <div class="container-xl">
-      <div class="row g-2 align-items-center">
-        <div class="col">
-          <!-- Page pre-title -->
-          <div class="page-pretitle">
-            SMA Negeri 1 Gianyar
-          </div>
-          <h2 class="page-title">
-            Dashboard
-          </h2>
-        </div>
+@endphp
 
-      </div>
-    </div>
-  </div>
 <div class="page-body">
     <div class="container-xl">
 
         <div class="border p-2 rounded-2">
             <div class="row">
                 <div class="col">
-                    <h2>TOTAL ABSENSI PERBULAN </h2>
+                    <h2>TOTAL ABSENSI BULAN {{strtoupper($namabulan[$bulanini])}} TAHUN {{$tahun}} </h2>
                 </div>
             </div>
             <div class="row justify-content-center mb-1">
@@ -141,7 +126,7 @@ $tgl_indo = tgl_indo(date('Y-m-d'));
 <div class="border p-2 rounded-2 mt-3">
     <div class="row">
         <div class="col">
-            <h2>TOTAL ABSENSI PERHARI </h2>
+            <h2>TOTAL ABSENSI HARI {{strtoupper($namahari)}}, {{strtoupper($tgl_indo)}}</h2>
         </div>
     </div>
     <div class="row justify-content-center mb-1">

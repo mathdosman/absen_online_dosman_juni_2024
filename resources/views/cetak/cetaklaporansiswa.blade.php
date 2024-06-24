@@ -184,7 +184,7 @@ $detik = date("s",strtotime($jamterlambat))*1;
         <span>DISPEN</span>
         @endif
     </td>
-    <td colspan="5" style="text-align: left">Keterangan : {{$d->keterangan}}</td>
+    <td colspan="5" style="text-align: left" class="p-1">Keterangan : {{$d->keterangan}}</td>
 </tr>
 @endif
 @endforeach

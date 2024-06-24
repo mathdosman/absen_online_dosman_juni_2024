@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
@@ -138,6 +139,20 @@ class SiswaController extends Controller
         } else {
             return Redirect::back()->with(['error'=>'Data Berhasil Dihapus']);
         }
+    }
+
+    public function resetpassword($nisn){
+        $nisn = Crypt::decrypt($nisn);
+        $password = Hash::make('123456');
+        $reset = DB::table('siswa')->where('nisn',$nisn)->update([
+        'password' =>$password]);
+
+        if($reset){
+            return Redirect::back()->with(['success'=>'Password Berhasil Diganti']);
+        } else {
+            return Redirect::back()->with(['error'=>'Password Gagal Diganti']);
+        }
+
     }
 
 

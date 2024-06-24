@@ -26,9 +26,9 @@ function selisih($jam_masuk, $jam_keluar)
     <td>{{ $d->nisn }}</td>
     <td class="text-start !important">{{ $d->nama_siswa }}</td>
     <td>{{ $d->kode_kelas }}</td>
-    <td>{{$d->kode_jam}}</td>
+    <td>{{$d->kode_lokasi}}</td>
     <td>
-        @if($d->jam_in > $d->start_datang)
+        @if($d->jam_in > $d->bel_sekolah)
         <span class="badge bg-danger text-light">{{date("H:i",strtotime($d->jam_in))}}</span>
         @else
         <span class="badge bg-success text-light">{{date("H:i",strtotime($d->jam_in))}}</span>
@@ -54,9 +54,9 @@ function selisih($jam_masuk, $jam_keluar)
     @endif
     </td>
     <td>
-        @if($d->jam_in >= $d->start_datang)
+        @if($d->jam_in >= $d->bel_sekolah)
         @php
-            $jamterlambat = selisih($d->start_datang,$d->jam_in);
+            $jamterlambat = selisih($d->bel_sekolah,$d->jam_in);
             $jamsaja = date("H",strtotime($jamterlambat))*1;
             $menitsaja = date("i",strtotime($jamterlambat))*1;
         @endphp
@@ -73,22 +73,29 @@ function selisih($jam_masuk, $jam_keluar)
         <td>{{ $d->nisn }}</td>
         <td class="text-start !important">{{ $d->nama_siswa }}</td>
         <td>{{ $d->kode_kelas }}</td>
-        <td></td>
-        <td colspan="5"> <span class="badge bg-info text-light">Izin :</span> {{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        <td>{{$d->kode_lokasi}}</td>
+        <td colspan="5"> <span class="badge bg-info text-light">Izin :</span> {{$d->keterangan}} <br> {{tgl_indo($d->tgl_izin_dari)}} s/d {{tgl_indo($d->tgl_izin_sampai)}}</td>
         @elseif($d->status == "s")
         <td>{{ $loop -> iteration }}</td>
         <td>{{ $d->nisn }}</td>
         <td class="text-start !important">{{ $d->nama_siswa }}</td>
         <td>{{ $d->kode_kelas }}</td>
-        <td></td>
-        <td colspan="5"><span class="badge bg-warning text-light">Sakit :</span>{{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        <td>{{$d->kode_lokasi}}</td>
+        <td colspan="5"><span class="badge bg-warning text-light">Sakit :</span>{{$d->keterangan}} <br> {{tgl_indo($d->tgl_izin_dari)}} s/d {{tgl_indo($d->tgl_izin_sampai)}}</td>
         @elseif($d->status == "d")
         <td>{{ $loop -> iteration }}</td>
         <td>{{ $d->nisn }}</td>
         <td class="text-start !important">{{ $d->nama_siswa }}</td>
         <td>{{ $d->kode_kelas }}</td>
-        <td></td>
-        <td colspan="5"><span class="badge bg-success text-light">Dispen :</span>{{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        <td>{{$d->kode_lokasi}}</td>
+        <td colspan="5"><span class="badge bg-success text-light">Dispen :</span>{{$d->keterangan}} <br> {{tgl_indo($d->tgl_izin_dari)}} s/d {{tgl_indo($d->tgl_izin_sampai)}}</td>
+        @elseif($d->status == "")
+        <td>{{ $loop -> iteration }}</td>
+        <td>{{ $d->nisn }}</td>
+        <td class="text-start !important">{{ $d->nama_siswa }}</td>
+        <td>{{ $d->kode_kelas }}</td>
+        <td>{{$d->kode_lokasi}}</td>
+        <td colspan="5" class="text-danger"><b>Belum Absen</b></td>
         @endif
     </tr>
 @endif

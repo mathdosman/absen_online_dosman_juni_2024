@@ -14,6 +14,7 @@ use App\Http\Controllers\IzinsakitController;
 use App\Http\Controllers\IzindispenController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\KonfigurasiController;
+use App\Models\Siswa;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,7 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/siswa/fotox', [SiswaController::class, 'foto']);
     Route::post('/siswa/{nisn}/update', [SiswaController::class, 'update']);
     Route::post('/siswa/{nisn}/delete', [SiswaController::class, 'delete']);
+    Route::get('/siswa/{nisn}/resetpassword',[SiswaController::class, 'resetpassword']);
 
     // Kelas
     Route::get('/kelas',[KelasController::class,'index']);

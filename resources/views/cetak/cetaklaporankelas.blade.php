@@ -45,6 +45,11 @@
     width: 40px;
     height: 45px;
   }
+
+  body.A4.landscape .sheet{
+    width: 297mm !important;
+    height: auto !important;
+  }
 </style>
 
 </head>
@@ -52,24 +57,7 @@
 <!-- Set "A5", "A4" or "A3" for class name -->
 <!-- Set also "landscape" if you need -->
 <body class="A4 landscape">
-<?php
-// function selisih($jam_masuk, $jam_keluar)
-//         {
-//             list($h, $m, $s) = explode(":", $jam_masuk);
-//             $dtAwal = mktime($h, $m, $s, "1", "1", "1");
-//             list($h, $m, $s) = explode(":", $jam_keluar);
-//             $dtAkhir = mktime($h, $m, $s, "1", "1", "1");
-//             $dtSelisih = $dtAkhir - $dtAwal;
-//             $totalmenit = $dtSelisih / 60;
-//             $jam = explode(".", $totalmenit / 60);
-//             $sisamenit = ($totalmenit / 60) - $jam[0];
-//             $sisamenit2 = $sisamenit * 60;
-//             $jml_jam = $jam[0];
-//             return $jml_jam . ":" . round($sisamenit2);
-//         }
-// ?>
-  <!-- Each sheet element should have the class "sheet" -->
-  <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+
   <section class="sheet padding-10mm">
 <table style="width: 100%">
     <tr>

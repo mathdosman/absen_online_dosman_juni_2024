@@ -9,6 +9,40 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
+    public function gethari()
+    {
+        $hari = date("D");
+        switch($hari){
+            case 'Sun':
+                $hari_ini = "Minggu";
+                break;
+            case 'Mon':
+                $hari_ini = "Senin";
+                break;
+            case 'Tue':
+                $hari_ini = "Selasa";
+                break;
+            case 'Wed':
+                $hari_ini = "Rabu";
+                break;
+            case 'Thu':
+                $hari_ini = "Kamis";
+                break;
+            case 'Fri':
+                $hari_ini = "Jumat";
+                break;
+            case 'Sat':
+                $hari_ini = "Sabtu";
+                break;
+
+            default:
+            $hari_ini = "Tidak diketahui";
+            break;
+        }
+        return $hari_ini;
+    }
+
     public function index(){
         $awalbulan =date("Y-m-01");
         $hariini = date("Y-m-d");
@@ -133,6 +167,11 @@ class DashboardController extends Controller
         $now = date("d")*1;
         // $alpha = $now - $ajuansakit - $ajuanizin - $hadir;
 
-        return view('dashboard.dashboardadmin',compact('jmlhadirhariini','jmlsiswa','sakitperbulan','sakitperhari','izinperbulan', 'izinperhari','dispenperbulan','dispenperhari','rekappresensi','alpha'));
+        $namabulan =["","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $bulanini = date('m')*1;
+        $tahun = date('Y');
+        $namahari = $this ->gethari();
+
+        return view('dashboard.dashboardadmin',compact('jmlhadirhariini','jmlsiswa','sakitperbulan','sakitperhari','izinperbulan', 'izinperhari','dispenperbulan','dispenperhari','rekappresensi','alpha','namabulan','bulanini','tahun','namahari'));
     }
 }

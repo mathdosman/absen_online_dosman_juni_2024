@@ -42,7 +42,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <form action="/ajuan/izinsakit" method="GET" autocomplete="off">
+                    <form action="/presensi/izinsakit" method="GET" autocomplete="off">
                         <div class="row">
                             <div class="col-3">
                                 <div class="input-icon mb-3">
@@ -61,6 +61,16 @@
                                     </span>
                                     <input type="text" value="{{Request('sampai')}}" name="sampai" id="sampai" class="form-control" placeholder="Sampai">
                                     </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-icon mb-3">
+                                    <select name="kode_kelas" id="kode_kelas" class="form-select" required>
+                                        <option  value="">Kelas</option>
+                                        @foreach ($kelas as $d)
+                                        <option {{Request('kode_kelas') == $d->kode_kelas ? 'selected' : '' }} value="{{$d->kode_kelas }}">{{ $d->nama_kelas }}</option>
+                                        @endforeach
+                                    </select>
+                                  </div>
                             </div>
                         </div>
                         <div class="row">

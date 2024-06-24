@@ -11,20 +11,53 @@ class MonitoringController extends Controller
 {
     public function monitoring()
     {
-        return view('cetak.monitoring');
+        $lokasi = DB::table('lokasi')->orderBy('kode_lokasi')->get();
+        $kelas = DB::table('kelas')->orderBy('kode_kelas')->get();
+        return view('cetak.monitoring',compact('lokasi','kelas'));
     }
 
     public function getpresensi(Request $request)
     {
+        $kode_kelas = Auth::guard('user')->user()->kode_kelas;
+        $kode_lokasi = Auth::guard('user')->user()->kode_lokasi;
+
         $tanggal = $request->tanggal;
-        $presensi = DB::table('presensi')
-        ->select('presensi.*','nama_siswa','siswa.kode_kelas','start_datang','nama_jam','start_pulang','keterangan','tgl_izin_dari','tgl_izin_sampai')
-        ->leftJoin('jam_sekolah','presensi.kode_jam','=','jam_sekolah.kode_jam')
-        ->leftJoin('pengajuan_izin','presensi.kode_izin','=','pengajuan_izin.kode_izin')
-        ->join('siswa','presensi.nisn','=','siswa.nisn')
-        ->join('kelas','siswa.kode_kelas','=','kelas.kode_kelas')
-        ->where('tgl_presensi',$tanggal)
-        ->get();
+
+        $query = Siswa::query();
+        $query->selectRaw('siswa.nisn,nama_siswa,siswa.kode_kelas,siswa.kode_lokasi, datapresensi.id, jam_in, jam_out, foto_in, foto_out, lokasi_in, lokasi_out, datapresensi.status, bel_sekolah, nama_jam, start_pulang, keterangan,  tgl_izin_dari, tgl_izin_sampai');
+        $query->leftJoin(
+            DB::raw("(
+                SELECT
+                presensi.nisn, presensi.id, jam_in, jam_out, foto_in, foto_out, lokasi_in, lokasi_out, presensi.status, bel_sekolah, nama_jam, start_pulang, keterangan, tgl_izin_dari, tgl_izin_sampai
+                FROM presensi
+                LEFT JOIN jam_sekolah ON presensi.kode_jam = jam_sekolah.kode_jam
+                LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+                WHERE tgl_presensi = '$tanggal'
+            ) datapresensi"),
+            function($join){
+                $join->on('siswa.nisn','=','datapresensi.nisn');
+            });
+
+            if(!empty($request->kode_lokasi)){
+                $query->where('siswa.kode_lokasi',$request->kode_lokasi);
+            }
+            if(!empty($request->kode_kelas)){
+                $query->where('siswa.kode_kelas',$request->kode_kelas);
+            }
+
+            $query -> orderBy('kode_kelas');
+
+            $presensi = $query->get();
+
+
+        // $presensi = DB::table('presensi')
+        // ->select('presensi.*','nama_siswa','siswa.kode_kelas','start_datang','nama_jam','start_pulang','keterangan','tgl_izin_dari','tgl_izin_sampai')
+        // ->leftJoin('jam_sekolah','presensi.kode_jam','=','jam_sekolah.kode_jam')
+        // ->leftJoin('pengajuan_izin','presensi.kode_izin','=','pengajuan_izin.kode_izin')
+        // ->join('siswa','presensi.nisn','=','siswa.nisn')
+        // ->join('kelas','siswa.kode_kelas','=','kelas.kode_kelas')
+        // ->where('tgl_presensi',$tanggal)
+        // ->get();
         return view('cetak.getpresensi',compact('presensi'));
     }
 

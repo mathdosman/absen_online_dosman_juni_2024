@@ -77,7 +77,7 @@ function buatkode($nomor_terakhir, $kunci, $jumlah_karakter = 0)
     return $kode;
 }
 
-function hitungjamkerja($jam_masuk, $jam_pulang)
+function hitungjamsekolah($jam_masuk, $jam_pulang)
     {
         $j_masuk = strtotime($jam_masuk);
         $j_pulang = strtotime($jam_pulang);
