@@ -21,18 +21,18 @@ class DashboardController extends Controller
 
         $historibulanini = DB::table('presensi')
         ->where('nisn',$nisn)
-        ->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
-        ->whereRaw('YEAR(tgl_presensi)="'.$tahunini.'"')
+        ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
         ->orderBy('tgl_presensi','desc')
         ->get();
 
 
-        $rekappresensi = DB::table('presensi')
-        ->selectRaw('COUNT(nisn) as jmlhadir')
-        ->where('nisn',$nisn)
-        ->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
-        ->whereRaw('YEAR(tgl_presensi)="'.$tahunini.'"')
-        ->first();
+        // $rekappresensi = DB::table('presensi')
+        // ->selectRaw('COUNT(nisn) as jmlhadir')
+        // ->where('nisn',$nisn)
+        // ->where('status',"h")
+        // ->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
+        // ->whereRaw('YEAR(tgl_presensi)="'.$tahunini.'"')
+        // ->first();
 
         $leaderboard = DB::table('presensi')
         ->join('siswa','presensi.nisn','=','siswa.nisn')
@@ -42,28 +42,26 @@ class DashboardController extends Controller
 
         $jmlabsen = DB::table('presensi')
         ->where('nisn',$nisn)
-        ->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
-        ->whereRaw('YEAR(tgl_presensi)="'.$tahunini.'"')
+        ->where('status',"h")
+        ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
         ->count();
 
-        $ajuansakit = DB::table('pengajuan_izin')
+        $ajuansakit = DB::table('presensi')
         ->where('nisn',$nisn)
         ->where('status',"s")
-        ->whereBetween('tgl_izin_dari', [ $awalbulan, $hariini])
-        ->where('status_approved',"1")
-        ->count();
-        $ajuanizin = DB::table('pengajuan_izin')
-        ->where('nisn',$nisn)
-        ->where('status',"i")
-        ->whereBetween('tgl_izin_dari', [ $awalbulan, $hariini])
-        ->where('status_approved',"1")
+        ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
         ->count();
 
-        $ajuandispen = DB::table('pengajuan_izin')
+        $ajuanizin = DB::table('presensi')
+        ->where('nisn',$nisn)
+        ->where('status',"i")
+        ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
+        ->count();
+
+        $ajuandispen = DB::table('presensi')
         ->where('nisn',$nisn)
         ->where('status',"d")
-        ->whereBetween('tgl_izin_dari', [ $awalbulan, $hariini])
-        ->where('status_approved',"1")
+        ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
         ->count();
 
         $hadir = $jmlabsen + $ajuandispen;
@@ -72,7 +70,7 @@ class DashboardController extends Controller
         $now = date("d")*1;
         $alpha = $now - $ajuansakit - $ajuanizin - $hadir;
 
-        return view('dashboard.dashboard',compact('cek','data','siswa','historibulanini','hariini', 'rekappresensi','leaderboard','ajuansakit','ajuanizin','alpha','hadir'));
+        return view('dashboard.dashboard',compact('cek','data','siswa','historibulanini','hariini','leaderboard','ajuansakit','ajuanizin','alpha','hadir'));
     }
 
 

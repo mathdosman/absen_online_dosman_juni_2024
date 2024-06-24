@@ -16,6 +16,7 @@ function selisih($jam_masuk, $jam_keluar)
 @endphp
 
 @foreach ($presensi as $d)
+@if($d->status == "h")
 @php
     $foto_in = Storage ::url('uploads/absensi/'.$d->foto_in);
     $foto_out = Storage ::url('uploads/absensi/'.$d->foto_out);
@@ -24,10 +25,10 @@ function selisih($jam_masuk, $jam_keluar)
     <td>{{ $loop -> iteration }}</td>
     <td>{{ $d->nisn }}</td>
     <td class="text-start !important">{{ $d->nama_siswa }}</td>
-    <td>{{ $d->nama_kelas }}</td>
-    <td>Sekolah Pagi</td>
+    <td>{{ $d->kode_kelas }}</td>
+    <td>{{$d->kode_jam}}</td>
     <td>
-        @if($d->jam_in > '07:30')
+        @if($d->jam_in > $d->start_datang)
         <span class="badge bg-danger text-light">{{date("H:i",strtotime($d->jam_in))}}</span>
         @else
         <span class="badge bg-success text-light">{{date("H:i",strtotime($d->jam_in))}}</span>
@@ -53,9 +54,9 @@ function selisih($jam_masuk, $jam_keluar)
     @endif
     </td>
     <td>
-        @if($d->jam_in >= '07:30')
+        @if($d->jam_in >= $d->start_datang)
         @php
-            $jamterlambat = selisih('07:30:00',$d->jam_in);
+            $jamterlambat = selisih($d->start_datang,$d->jam_in);
             $jamsaja = date("H",strtotime($jamterlambat))*1;
             $menitsaja = date("i",strtotime($jamterlambat))*1;
         @endphp
@@ -65,7 +66,32 @@ function selisih($jam_masuk, $jam_keluar)
         @endif
     </td>
 </tr>
-
+@else
+    <tr>
+        @if($d->status == "i")
+        <td>{{ $loop -> iteration }}</td>
+        <td>{{ $d->nisn }}</td>
+        <td class="text-start !important">{{ $d->nama_siswa }}</td>
+        <td>{{ $d->kode_kelas }}</td>
+        <td></td>
+        <td colspan="5"> <span class="badge bg-info text-light">Izin :</span> {{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        @elseif($d->status == "s")
+        <td>{{ $loop -> iteration }}</td>
+        <td>{{ $d->nisn }}</td>
+        <td class="text-start !important">{{ $d->nama_siswa }}</td>
+        <td>{{ $d->kode_kelas }}</td>
+        <td></td>
+        <td colspan="5"><span class="badge bg-warning text-light">Sakit :</span>{{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        @elseif($d->status == "d")
+        <td>{{ $loop -> iteration }}</td>
+        <td>{{ $d->nisn }}</td>
+        <td class="text-start !important">{{ $d->nama_siswa }}</td>
+        <td>{{ $d->kode_kelas }}</td>
+        <td></td>
+        <td colspan="5"><span class="badge bg-success text-light">Dispen :</span>{{$d->keterangan}} <br> {{$d->tgl_izin_dari}} s/d {{$d->tgl_izin_sampai}}</td>
+        @endif
+    </tr>
+@endif
 @endforeach
 
 <script>

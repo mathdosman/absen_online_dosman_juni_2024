@@ -98,7 +98,7 @@ class SiswaController extends Controller
         $jabatan = $request->jabatan;
         $nama_siswa = $request-> nama_siswa;
         $no_hp = $request-> no_hp;
-        $password = Hash::make('123456');
+        $password = $request->old_password;
         $old_foto = $request->old_foto;
         if($request ->hasFile('foto')){
             $foto = $nisn.".".$request->file('foto')->getClientOriginalExtension();

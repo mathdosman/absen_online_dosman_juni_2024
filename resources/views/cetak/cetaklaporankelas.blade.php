@@ -77,7 +77,7 @@
             <img src="{{asset('assets/img/logodosman.png')}}" width="100" height="100" alt="">
         </td>
         <td style="text-align: center">
-            <span id="title"><b> Rekap Absensi Siswa <br> Periode {{$namabulan[$bulan]}} {{$tahun}} </b>
+            <span id="title"><b> Rekap Absensi Siswa </b>
             </span> <br>
                 <span > <b> SMA Negeri 1 Gianyar</span> </b> <br>
                 <span style="margin-top:2px">Jln. Ratna, Tegal Tugu Gianyar, Telp: (0361) 943034</span> <br>
@@ -87,39 +87,75 @@
 </table>
 <hr>
 <div class="row">
-    <div class="col" style="text-align: center">Rekap Laporan Absensi <br> KELAS {{$kode_kelas}} Bulan {{$bulan}} Tahun {{$tahun}} </div>
+    <div class="col" style="text-align: center">Rekap Laporan Absensi <br> Kelas {{$kode_kelas}} Bulan {{$namabulan[$bulan]}} Tahun {{$tahun}} </div>
 </div>
 <table  class="tabelpresensi">
     <tr>
         <th rowspan="2">NISN</th>
         <th rowspan="2">Nama Siswa</th>
-        <th colspan="31">Tanggal</th>
+        <th colspan="{{$jmlhari}}">Tanggal</th>
         <th rowspan="2">Total <br> Hadir</th>
-        <th rowspan="2">Telat</th>
+        <th rowspan="2">S</th>
+        <th rowspan="2">I</th>
+        <th rowspan="2">A</th>
     </tr>
     <tr>
         <?php
-        for($i=1; $i<=31;$i++){
+        for($i=1; $i<=$jmlhari;$i++){
             ?>
         <th>{{$i}}</th>
         <?php
         }
         ?>
     </tr>
-    @foreach ($rekap as $d)
+    @foreach ($rekap as $r)
     <tr>
-        <td>{{$d->nisn}}</td>
-        <td style="text-align: left !important">{{$d->nama_siswa}}</td>
+        <td>{{$r->nisn}}</td>
+        <td style="text-align: left">{{$r->nama_siswa}}</td>
         <?php
-        for($i=1; $i<=31;$i++){
-            $tgl="tgl_".$i;
-            ?>
-            <td>{{$d->$tgl}}</td>
-        <?php
-        }
-        ?>
-        <td></td>
-        <td></td>
+                    $jml_hadir = 0;
+                    $jml_izin = 0;
+                    $jml_sakit = 0;
+                    $jml_alpha = 0;
+                    for($i=1; $i<=$jmlhari ; $i++){
+                        $tgl = "tgl_".$i;
+                        $datapresensi = explode("|",$r->$tgl);
+                        if ($r->$tgl !== NULL){
+                            $status = $datapresensi[2];
+                        } else {
+                            $status = "";
+                        }
+
+                        if($status == "h"){
+                            $jml_hadir += 1;
+                        }
+                        if($status == "i"){
+                            $jml_izin += 1;
+                        }
+                        if($status == "s"){
+                            $jml_sakit += 1;
+                        }
+                        if($status == "d"){
+                            $jml_hadir += 1;
+                        }
+                        if(empty($status)){
+                            $jml_alpha += 1;
+                        }
+                ?>
+                <td>
+                    @if($status=="h")
+                    &#x2714;
+                    @else
+                    {{strtoupper($status)}}
+                    @endif
+                </td>
+                <?php
+                    }
+                ?>
+            <td>{{ !empty($jml_hadir) ? $jml_hadir : 0}}</td>
+            <td>{{ !empty($jml_sakit) ? $jml_sakit : 0}}</td>
+            <td>{{ !empty($jml_izin) ? $jml_izin : 0}}</td>
+            <td>{{ !empty($jml_alpha) ? $jml_alpha : 0}}</td>
     </tr>
     @endforeach
 
@@ -129,12 +165,13 @@
     <tr>
         <td style="text-align: left">
             <span style="margin-left: 850px;">Gianyar, {{date('d-m-Y')}}</span>
+            <span style="margin-left: 850px;">Wali Kelas</span>
             <br>
             <br>
             <br>
             <br>
            <u style="margin-left: 850px"> I Putu Darma Putra, S.Pd </u> <br>
-           <i style="margin-left: 850px"><b>Guru Piket</b></i>
+           <i style="margin-left: 850px"><b>NIP</b></i>
         </td>
     </tr>
 </table>

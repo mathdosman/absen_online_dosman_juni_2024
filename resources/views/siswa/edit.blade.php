@@ -59,7 +59,8 @@
     <div class="mb-3">
     <div class="form-label">Tambahkan Foto Profile</div>
     <input type="file" class="form-control" name="foto" id="foto">
-    <input type="hidden" name="old_foto" value="{{ $siswa -> foto}}">
+    <input type="hidden" name="old_foto" value="{{ $siswa ->foto}}">
+    <input type="hidden" name="old_password" value="{{ $siswa ->password}}">
     </div>
 
     <div class="modal-footer form-group">

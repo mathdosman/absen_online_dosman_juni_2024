@@ -138,7 +138,7 @@ function selisih($jam_masuk, $jam_keluar)
     <th>Keterangan <br>(jam:menit)</th>
 </tr>
 @foreach ($presensi as $d)
-{{-- @if($d->status == "h") --}}
+@if($d->status == "h")
 @php
 $path_in = Storage::url('uploads/absensi/'.$d->foto_in);
 $path_out = Storage::url('uploads/absensi/'.$d->foto_out);
@@ -150,7 +150,7 @@ $detik = date("s",strtotime($jamterlambat))*1;
 <tr>
     <td>{{$loop ->iteration}}</td>
     <td>{{date("d-m-Y",strtotime($d->tgl_presensi))}}</td>
-    <td></td>
+    <td>HADIR</td>
     <td>{{date("H:i",strtotime($d->jam_in))}}</td>
     <td>
         <img src="{{url($path_in)}}" alt="" class="avatar w64">
@@ -171,7 +171,22 @@ $detik = date("s",strtotime($jamterlambat))*1;
         @endif
     </td>
 </tr>
-
+@else
+<tr>
+    <td>{{$loop ->iteration}}</td>
+    <td>{{date("d-m-Y",strtotime($d->tgl_presensi))}}</td>
+    <td>
+        @if($d->status == "i")
+        <span>IZIN</span>
+        @elseif($d->status == "s")
+        <span>SAKIT</span>
+        @elseif($d->status == "d")
+        <span>DISPEN</span>
+        @endif
+    </td>
+    <td colspan="5" style="text-align: left">Keterangan : {{$d->keterangan}}</td>
+</tr>
+@endif
 @endforeach
 
 

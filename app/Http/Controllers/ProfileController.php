@@ -74,10 +74,12 @@ class ProfileController extends Controller
         $nisn = Auth::guard('siswa')->user()->nisn;
 
         $histori = DB::table('presensi')
+        ->select('presensi.*','keterangan')
+        -> leftJoin('pengajuan_izin','pengajuan_izin.kode_izin','=','presensi.kode_izin')
         -> whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
         -> whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
-        ->where('nisn',$nisn)
-        ->orderBy('tgl_presensi')
+        ->where('presensi.nisn',$nisn)
+        ->orderBy('tgl_presensi','desc')
         ->get();
 
         return view('profile.gethistori', compact('histori'));

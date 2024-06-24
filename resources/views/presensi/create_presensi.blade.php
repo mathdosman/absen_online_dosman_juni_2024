@@ -174,7 +174,7 @@
                     setTimeout("location.href='/dashboard'", 3000)
                 return redirect('dashboard');
                 }else{
-                    if(status[2]=="radius"){
+                    if(status[2]=="radius" || status[0]=="error"){
                         Swal.fire({
                     title: 'Gagal Absen!',
                     text: status[1],

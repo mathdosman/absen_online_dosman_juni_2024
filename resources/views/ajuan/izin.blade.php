@@ -56,7 +56,7 @@
 
 <div class="container " style="position: hover; width:100%; margin: auto; overflow-y:scroll; height:430px">
     <div class="row"  >
-        <div class="col">
+        <div class="col mb-2">
             @php
                 $messagesuccess=Session::get('success');
                 $messageerror=Session::get('error');
@@ -126,10 +126,14 @@
                             @endif
                             <small class="text-muted ">{{$d->keterangan}}</small> <br>
                             @if(!empty($d->doc_sid))
-
-                            <a target="_blank" href="{{asset('storage/uploads/sid/'.$d->doc_sid)}}" id="kakul" style="color: blue;"><ion-icon name="attach-outline"></ion-icon>Lihat Surat Izin</a>
+                                    @if($d->status == "i")
+                                    <a target="_blank" href="{{asset('storage/uploads/sid/'.$d->doc_sid)}}" id="kakul" style="color: blue;"><ion-icon name="attach-outline"></ion-icon>Lihat Surat Izin</a>
+                                    @elseif ($d->status == "s")
+                                    <a target="_blank" href="{{asset('storage/uploads/sid/'.$d->doc_sid)}}" id="kakul" style="color: rgb(213, 195, 30);"><ion-icon name="attach-outline"></ion-icon>Lihat Surat Sakit</a>
+                                    @elseif ($d->status == "d")
+                                    <a target="_blank" href="{{asset('storage/uploads/sid/'.$d->doc_sid)}}" id="kakul" style="color: rgb(36, 147, 11);"><ion-icon name="attach-outline"></ion-icon>Lihat Surat Dispensasi</a>
+                                    @endif
                             @endif
-
                         </div>
                         <div class="status">
                             @if ($d->status_approved == 0)

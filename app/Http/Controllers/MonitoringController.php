@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,9 @@ class MonitoringController extends Controller
     {
         $tanggal = $request->tanggal;
         $presensi = DB::table('presensi')
-        ->select('presensi.*','nama_siswa','nama_kelas')
+        ->select('presensi.*','nama_siswa','siswa.kode_kelas','start_datang','nama_jam','start_pulang','keterangan','tgl_izin_dari','tgl_izin_sampai')
+        ->leftJoin('jam_sekolah','presensi.kode_jam','=','jam_sekolah.kode_jam')
+        ->leftJoin('pengajuan_izin','presensi.kode_izin','=','pengajuan_izin.kode_izin')
         ->join('siswa','presensi.nisn','=','siswa.nisn')
         ->join('kelas','siswa.kode_kelas','=','kelas.kode_kelas')
         ->where('tgl_presensi',$tanggal)
@@ -68,6 +71,9 @@ class MonitoringController extends Controller
         ->first();
 
         $presensi = DB::table('presensi')
+        ->select('presensi.*','keterangan','jam_sekolah.*')
+        ->leftJoin('jam_sekolah','presensi.kode_jam','=','jam_sekolah.kode_jam')
+        ->leftJoin('pengajuan_izin','presensi.kode_izin','=','pengajuan_izin.kode_izin')
         -> where('presensi.nisn',$nisn)
         -> whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
         -> whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
@@ -96,47 +102,64 @@ class MonitoringController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $kode_kelas = $request->kode_kelas;
+        $dari = $tahun."-".$bulan."-01";
+        $sampai = date("Y-m-t",strtotime($dari));
         $namabulan =["","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        $rekap = DB::table('presensi')
-        ->selectRaw('presensi.nisn, nama_siswa,
-        MAX(IF(DAY(tgl_presensi)=1,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_1,
-        MAX(IF(DAY(tgl_presensi)=2,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_2,
-        MAX(IF(DAY(tgl_presensi)=3,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_3,
-        MAX(IF(DAY(tgl_presensi)=4,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_4,
-        MAX(IF(DAY(tgl_presensi)=5,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_5,
-        MAX(IF(DAY(tgl_presensi)=6,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_6,
-        MAX(IF(DAY(tgl_presensi)=7,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_7,
-        MAX(IF(DAY(tgl_presensi)=8,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_8,
-        MAX(IF(DAY(tgl_presensi)=9,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_9,
-        MAX(IF(DAY(tgl_presensi)=10,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_10,
-        MAX(IF(DAY(tgl_presensi)=11,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_11,
-        MAX(IF(DAY(tgl_presensi)=12,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_12,
-        MAX(IF(DAY(tgl_presensi)=13,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_13,
-        MAX(IF(DAY(tgl_presensi)=14,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_14,
-        MAX(IF(DAY(tgl_presensi)=15,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_15,
-        MAX(IF(DAY(tgl_presensi)=16,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_16,
-        MAX(IF(DAY(tgl_presensi)=17,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_17,
-        MAX(IF(DAY(tgl_presensi)=18,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_18,
-        MAX(IF(DAY(tgl_presensi)=19,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_19,
-        MAX(IF(DAY(tgl_presensi)=20,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_20,
-        MAX(IF(DAY(tgl_presensi)=21,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_21,
-        MAX(IF(DAY(tgl_presensi)=22,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_22,
-        MAX(IF(DAY(tgl_presensi)=23,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_23,
-        MAX(IF(DAY(tgl_presensi)=24,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_24,
-        MAX(IF(DAY(tgl_presensi)=25,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_25,
-        MAX(IF(DAY(tgl_presensi)=26,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_26,
-        MAX(IF(DAY(tgl_presensi)=27,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_27,
-        MAX(IF(DAY(tgl_presensi)=28,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_28,
-        MAX(IF(DAY(tgl_presensi)=29,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_29,
-        MAX(IF(DAY(tgl_presensi)=30,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_30,
-        MAX(IF(DAY(tgl_presensi)=31,CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) as tgl_31
-        ')
-        ->join('siswa','presensi.nisn','=','siswa.nisn')
-        ->where('kode_kelas',$kode_kelas)
-        ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
-        ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
-        ->groupByRaw('presensi.nisn,nama_siswa')
-        -> get();
+
+        $select_date = "";
+        $field_date = "";
+        $i = 1;
+        while(strtotime($dari)<=strtotime($sampai)){
+            $rangetanggal[] = $dari;
+
+            $select_date .= "MAX(IF(tgl_presensi = '$dari',
+                    CONCAT(
+                    IFNULL(jam_in,'NA'),'|',
+                    IFNULL(jam_out,'NA'),'|',
+                    IFNULL(presensi.status, 'NA'), '|',
+                    IFNULL(nama_jam, 'NA'), '|',
+                    IFNULL(start_datang, 'NA'), '|',
+                    IFNULL(start_pulang, 'NA'), '|',
+                    IFNULL(presensi.kode_izin, 'NA'),'|',
+                    IFNULL(keterangan, 'NA'), '|'
+                    ),NULL)) as tgl_".$i.",";
+
+            $field_date .= "tgl_".$i.",";
+            $i++;
+            $dari = date("Y-m-d", strtotime("+1 day", strtotime($dari)));
+        }
+
+        $jmlhari = count($rangetanggal);
+        $lastrange = $jmlhari - 1;
+        $sampai = $rangetanggal[$lastrange];
+
+                $query = Siswa::query();
+                $query->selectRaw("$field_date siswa.nisn, nama_siswa, jabatan, kode_kelas");
+
+                $query->leftJoin(
+                    DB::raw("(
+                        SELECT
+                        $select_date
+                        presensi.nisn
+
+                        FROM presensi
+                        LEFT JOIN jam_sekolah ON presensi.kode_jam = jam_sekolah.kode_jam
+                        LEFT JOIN pengajuan_izin ON presensi.kode_izin = pengajuan_izin.kode_izin
+                        WHERE tgl_presensi BETWEEN '$rangetanggal[0]' AND '$sampai'
+                        GROUP BY nisn
+                    ) presensi"),
+                    function($join){
+                        $join->on('siswa.nisn','=','presensi.nisn');
+                    }
+                    );
+
+            //AKHIR
+            if(!empty($kode_kelas)){
+                $query->where('kode_kelas', $kode_kelas);
+            }
+            $query->orderBy('nama_siswa');
+            $rekap = $query -> get();
+
 
         if(isset($_POST['exportexcel'])){
             $time = date("d-M-Y H:i:s");
@@ -145,7 +168,7 @@ class MonitoringController extends Controller
             //Mendefiniskikan nama file ekspor "hasil-export.xls"
             header("Content-Disposition:attachment; filename=Rekap Absensi $time.xls");
         }
-        return view('cetak.cetaklaporankelas',compact('namabulan','bulan','tahun','rekap','kode_kelas'));
+        return view('cetak.cetaklaporankelas',compact('namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari'));
     }
 
 }

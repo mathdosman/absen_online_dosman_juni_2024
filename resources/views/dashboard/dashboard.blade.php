@@ -236,26 +236,49 @@
                                 <ion-icon name="alert-sharp"></ion-icon>
                             </div>
                             <div class="in">
-                                <div>Hari ini, {{date("d-m-Y",strtotime($hariini))}}</div>
+                                @php
+                                $tgl_hariini = tgl_indo(date($hariini));
+                                @endphp
+                                <div>Hari ini, {{$tgl_hariini}}</div>
                                 <span class="badge badge-danger p-1">Belum Absen</span>
                             </div>
                         </div>
                     </li>
                     @endif
 
+
                     @foreach ($historibulanini as $d)
                     <li>
+                        @php
+                        $tgl_indo = tgl_indo(date($d->tgl_presensi));
+                        @endphp
                         <div class="item">
-                            <div class="icon-box bg-secondary">
+                            <div class="icon-box" style="background-color: rgb(212, 211, 211)">
+                                @if ($d->status == "h")
                                 <img src="{{asset('assets/img/sample/avatar/avatar1.jpg')}}" alt="avatar1" class="image">
+                                @elseif($d->status == "i")
+                                <ion-icon name="receipt" class="text-info"></ion-icon>
+                                @elseif($d->status == "s")
+                                <ion-icon name="medkit" class="text-warning"></ion-icon>
+                                @elseif($d->status == "d")
+                                <ion-icon name="medal" class="text-success"></ion-icon>
+                                @endif
                             </div>
                             <div class="in">
-                                <div>{{date("d-m-Y",strtotime($d->tgl_presensi))}}</div>
-                                <span class="badge {{$d->jam_in < "07:30" ? "badge-success" : "badge-danger" }} p-1">{{date("H:i",strtotime($d->jam_in))}}</span>
-                                @if($data !== null && $d->jam_out == null)
-                                <span class="badge badge-danger p-1">00:00</span>
-                                @else
-                                <span class="badge badge-warning p-1">{{date("H:i",strtotime($d->jam_out))}}</span>
+                                <div>{{$tgl_indo}}</div>
+                                @if($d->status == "h")
+                                    <span class="badge {{$d->jam_in < "07:30" ? "badge-success" : "badge-danger" }} p-1">{{date("H:i",strtotime($d->jam_in))}}</span>
+                                    @if($data !== null && $d->jam_out == null)
+                                    <span class="badge badge-danger p-1">00:00</span>
+                                    @else
+                                    <span class="badge badge-warning p-1">{{date("H:i",strtotime($d->jam_out))}}</span>
+                                    @endif
+                                @elseif($d->status == "i")
+                                <span class="bg-info p-1">Izin</span>
+                                @elseif($d->status == "s")
+                                <span class="bg-warning p-1">Sakit</span>
+                                @elseif($d->status == "d")
+                                <span class="bg-success p-1">Dispen</span>
                                 @endif
                             </div>
                         </div>
