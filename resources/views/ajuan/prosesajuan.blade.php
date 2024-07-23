@@ -64,7 +64,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="input-icon mb-3">
-                                    <select name="kode_kelas" id="kode_kelas" class="form-select" required>
+                                    <select name="kode_kelas" id="kode_kelas" class="form-select">
                                         <option  value="">Kelas</option>
                                         @foreach ($kelas as $d)
                                         <option {{Request('kode_kelas') == $d->kode_kelas ? 'selected' : '' }} value="{{$d->kode_kelas }}">{{ $d->nama_kelas }}</option>
@@ -156,7 +156,14 @@
                                     <td>{{$d->nisn}}</td>
                                     <td class="text-start">{{$d->nama_siswa}}</td>
                                     <td>{{$d->kode_kelas}}</td>
-                                    <td>{{$d->status== "i" ? "izin" : "sakit"}} <br> {{hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai)}} hari</td>
+                                    @if($d->status== "i")
+                                    <td>Izin <br> {{hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai)}} hari</td>
+                                    @elseif($d->status== "s")
+                                    <td>Sakit <br> {{hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai)}} hari</td>
+                                    @elseif($d->status== "d")
+                                    <td>Dispen <br> {{hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai)}} hari</td>
+                                    @endif
+                                    {{-- <td>{{$d->status== "i" ? "izin" : "sakit"}} <br> {{hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai)}} hari</td> --}}
                                     <td>
                                         <svg  xmlns="http://www.w3.org/2000/svg" class="suratizin text-success" kode_izin2="{{$d->kode_izin}}"   width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-briefcase"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 13.478v4.522a3 3 0 0 1 -3 3h-14a3 3 0 0 1 -3 -3v-4.522l.553 .277a20.999 20.999 0 0 0 18.897 -.002l.55 -.275zm-8 -11.478a3 3 0 0 1 3 3v1h2a3 3 0 0 1 3 3v2.242l-1.447 .724a19.002 19.002 0 0 1 -16.726 .186l-.647 -.32l-1.18 -.59v-2.242a3 3 0 0 1 3 -3h2v-1a3 3 0 0 1 3 -3h4zm-2 8a1 1 0 0 0 -1 1a1 1 0 1 0 2 .01c0 -.562 -.448 -1.01 -1 -1.01zm2 -6h-4a1 1 0 0 0 -1 1v1h6v-1a1 1 0 0 0 -1 -1z" /></svg>
 

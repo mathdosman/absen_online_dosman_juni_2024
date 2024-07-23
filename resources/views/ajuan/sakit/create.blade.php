@@ -29,30 +29,30 @@
         <form method="POST" action="/izinsakit/store" id="frmIzin" enctype="multipart/form-data">
             @csrf
         <div class="form-group">
-            <input type="text" id="tgl_izin_dari" name="tgl_izin_dari" class="form-control datepicker" placeholder="Dari" autocomplete="off">
+            <input type="text" id="tgl_izin_dari" name="tgl_izin_dari" class="form-control datepicker" placeholder="Dari" autocomplete="off" required>
         </div>
         <div class="form-group">
-            <input type="text" id="tgl_izin_sampai" name="tgl_izin_sampai" class="form-control datepicker" placeholder="Sampai" autocomplete="off">
+            <input type="text" id="tgl_izin_sampai" name="tgl_izin_sampai" class="form-control datepicker" placeholder="Sampai" autocomplete="off" required>
         </div>
         <div class="form-group">
             <input type="text" id="jml_hari" name="jml_hari" class="form-control" placeholder="Jumlah Hari" autocomplete="off" readonly>
         </div>
 
         <div class="custom-file-upload border border-dark" id="fileUpload1" style="height: 100px !important">
-            <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg">
+            <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg" required>
             <label for="fileuploadInput">
                 <span>
                     <strong>
                         <ion-icon name="cloud-upload-outline" role="img" class="md hydrated"
             aria-label="cloud upload outline"></ion-icon>
-                        <i>Tap to Upload SID</i>
+                        <i>Wajib upload surat keterangan sakit</i>
                     </strong>
                 </span>
             </label>
         </div>
 
         <div class="form-group border mt-3">
-            <input type="text" id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan" autocomplete="off">
+            <input type="text" id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan" autocomplete="off" required>
         </div>
         <div class="form-group">
             <button class="btn btn-block bg-warning" >Kirim</button>

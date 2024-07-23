@@ -44,7 +44,7 @@ class IzinabsenController extends Controller
     public function izinsakit(Request $request)
     {
         $query = Pengajuanizin::query();
-        $query ->select('kode_izin','tgl_izin_dari','tgl_izin_sampai','pengajuan_izin.nisn','nama_siswa','kode_kelas','status_approved','keterangan','doc_sid');
+        $query ->select('kode_izin','tgl_izin_dari','status','tgl_izin_sampai','pengajuan_izin.nisn','nama_siswa','kode_kelas','status_approved','keterangan','doc_sid');
         $query -> join('siswa','pengajuan_izin.nisn','=','siswa.nisn');
 
         if(!empty($request->dari) && !empty($request->sampai)){
@@ -83,8 +83,17 @@ class IzinabsenController extends Controller
 
         $dataizin = DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->first();
 
+        $dari = tgl_indo($dataizin->tgl_izin_dari);
+        $sampai = tgl_indo($dataizin->tgl_izin_sampai);
+        $keterangan = $dataizin->keterangan;
+
         $nisn = $dataizin->nisn;
         $status = $dataizin->status;
+        $datasiswa = DB::table('siswa')->where('nisn',$nisn)->first();
+        $nama = $datasiswa->nama_siswa;
+        $tgl = tgl_indo(date('Y-m-d'));
+        $no_hp = $datasiswa->no_hp;
+
 
         $tgl_dari = $dataizin->tgl_izin_dari;
         $tgl_sampai = $dataizin->tgl_izin_sampai;
@@ -106,6 +115,62 @@ class IzinabsenController extends Controller
                 'status_approved' => $status_approved
             ]);
             DB::commit();
+            if($dataizin->status == "i"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." melakukan pengajuan *IZIN* tidak sekolah, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_ \n*(DISETUJUI)*" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }elseif($dataizin->status == "s"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." melakukan pengajuan *SAKIT*, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_ \n*(DISETUJUI)*" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }elseif($dataizin->status == "d"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." melakukan pengajuan *DISPENSASI* sekolah, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_ \n*(DISETUJUI)*" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }
+
             return Redirect::back()->with(['success'=>'Data Berhasil di Update']);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -115,7 +180,18 @@ class IzinabsenController extends Controller
     }
 
     public function batalkanizinsakit($kode_izin){
+        $dataizin = DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->first();
 
+        $dari = tgl_indo($dataizin->tgl_izin_dari);
+        $sampai = tgl_indo($dataizin->tgl_izin_sampai);
+        $keterangan = $dataizin->keterangan;
+
+        $nisn = $dataizin->nisn;
+        $status = $dataizin->status;
+        $datasiswa = DB::table('siswa')->where('nisn',$nisn)->first();
+        $nama = $datasiswa->nama_siswa;
+        $tgl = tgl_indo(date('Y-m-d'));
+        $no_hp = $datasiswa->no_hp;
         DB::beginTransaction();
         try {
             DB::table('pengajuan_izin')->where('kode_izin', $kode_izin)->update([
@@ -123,6 +199,61 @@ class IzinabsenController extends Controller
             ]);
             DB::table('presensi')->where('kode_izin', $kode_izin)->delete();
             DB::commit();
+            if($dataizin->status == "i"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." *PEMBATALAN* pengajuan *IZIN* tidak sekolah, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }elseif($dataizin->status == "s"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." *PEMBATALAN* pengajuan *SAKIT*, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }elseif($dataizin->status == "d"){
+                $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => array('message' => $tgl.", \n".$nama." *PEMBATALAN* pengajuan *DISPENSASI* sekolah, dari tanggal ".$dari." sampai ".$sampai." dengan alasan : \n_".$keterangan."_" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+                // echo $response;
+            }
             return Redirect::back()->with(['success'=>'Pengajuan Berhasil Dibatalkan']);
         } catch (\Exception $e) {
             DB::rollBack();
