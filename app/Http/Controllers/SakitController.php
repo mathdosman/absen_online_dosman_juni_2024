@@ -22,6 +22,10 @@ class SakitController extends Controller
 
         $bulan = date("m",strtotime($tgl_izin_dari));
         $tahun = date("Y",strtotime($tgl_izin_dari));
+
+        $day = date("d",strtotime($tgl_izin_dari));
+
+
         $thn = substr($tahun,2,2);
 
         $lastizin = DB::table('pengajuan_izin')
@@ -31,7 +35,7 @@ class SakitController extends Controller
         ->first();
 
         $lastkodeizin = $lastizin !== null ? $lastizin->kode_izin : "";
-        $format = "K".$nisn.$bulan.$thn;
+        $format = "S".$nisn.$day.$bulan.$thn;
         $kode_izin = buatkode($lastkodeizin,$format,2);
 
         if ($request->hasFile('sid')) {

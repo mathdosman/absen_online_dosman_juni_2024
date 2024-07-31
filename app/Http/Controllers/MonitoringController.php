@@ -192,7 +192,7 @@ class MonitoringController extends Controller
             }
             $query->orderBy('nama_siswa');
             $rekap = $query -> get();
-
+            // dd($rekap);
 
         if(isset($_POST['exportexcel'])){
             $time = date("d-M-Y H:i:s");

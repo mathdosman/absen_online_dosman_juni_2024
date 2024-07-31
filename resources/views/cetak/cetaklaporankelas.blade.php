@@ -110,6 +110,8 @@
                         $datapresensi = explode("|",$r->$tgl);
                         if ($r->$tgl !== NULL){
                             $status = $datapresensi[2];
+                            $jampulang = $datapresensi[1];
+                            $jamdatang = $datapresensi[0];
                         } else {
                             $status = "";
                         }
@@ -131,10 +133,34 @@
                         }
                 ?>
                 <td>
+                    <style>
+                        .terlambat-tidak_absen_pulang {
+                            display: inline-block;
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%; /* Membuat bentuk lingkaran */
+                            background-color: red; /* Warna latar belakang hijau */
+                            text-align: center;
+                            line-height: 18px; /* Menyesuaikan posisi vertikal teks */
+                            color:white; /* Warna teks (putih agar terlihat jelas di latar hijau) */
+                            }
+                    </style>
                     @if($status=="h")
-                    &#x2714;
+                        @if($jamdatang > "07:30:00")
+                            @if($jampulang == "NA")
+                            <span class="terlambat-tidak_absen_pulang">✔</span>
+                            @else
+                            <span style="color: red ;">✔</span>
+                            @endif
+                        @else
+                            @if($jampulang == "NA")
+                            <span style="color: rgb(241, 230, 13);">✔</span>
+                            @else
+                            <span style="color: rgb(13, 241, 13);">✔</span>
+                            @endif
+                        @endif
                     @else
-                    {{strtoupper($status)}}
+                    {{$status}}
                     @endif
                 </td>
                 <?php
@@ -147,6 +173,25 @@
     </tr>
     @endforeach
 
+
+</table>
+<table class="table" style="margin-top: 10px">
+    <tr>
+        <td><span style="color: rgb(13, 241, 13);">✔</span></td>
+        <td>: Absen Lengkap</td>
+    </tr>
+    <tr>
+        <td><span style="color: rgb(241, 230, 13);">✔</span></td>
+        <td>: Tidak Absen Pulang</td>
+    </tr>
+    <tr>
+        <td><span style="color: red ;">✔</span></td>
+        <td>: Datang Terlambat</td>
+    </tr>
+    <tr>
+        <td><span class="terlambat-tidak_absen_pulang">✔</span></td>
+        <td>: Terlambat dan Tidak Absen Pulang</td>
+    </tr>
 
 </table>
 <table width="100%" style="margin-top: 80px" >
