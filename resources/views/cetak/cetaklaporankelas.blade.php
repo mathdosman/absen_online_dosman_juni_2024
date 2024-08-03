@@ -50,6 +50,16 @@
     width: 297mm !important;
     height: auto !important;
   }
+  @media print {
+  @page {
+    size: A4 landscape;
+    margin-top: 0.10in;
+    margin-bottom: 0.75in;
+    margin-left: 0.25in;
+    margin-right: 0.25in;
+  }
+}
+
 </style>
 
 </head>
@@ -79,25 +89,26 @@
 </div>
 <table  class="tabelpresensi">
     <tr>
+        <th rowspan="2">No</th>
         <th rowspan="2">NISN</th>
         <th rowspan="2">Nama Siswa</th>
         <th colspan="{{$jmlhari}}">Tanggal</th>
         <th rowspan="2">Total <br> Hadir</th>
-        <th rowspan="2">S</th>
-        <th rowspan="2">I</th>
-        <th rowspan="2">A</th>
+        <th rowspan="2">s</th>
+        <th rowspan="2">i</th>
+        <th rowspan="2">a</th>
     </tr>
     <tr>
-        <?php
-        for($i=1; $i<=$jmlhari;$i++){
-            ?>
-        <th>{{$i}}</th>
-        <?php
-        }
-        ?>
+       @foreach ($rangetanggal as $d)
+            @if ($d != null)
+                <th>{{date('d',strtotime($d))}}</th>
+            @endif
+
+       @endforeach
     </tr>
     @foreach ($rekap as $r)
     <tr>
+        <td>{{$loop->iteration}}</td>
         <td>{{$r->nisn}}</td>
         <td style="text-align: left">{{$r->nama_siswa}}</td>
         <?php
@@ -105,8 +116,13 @@
                     $jml_izin = 0;
                     $jml_sakit = 0;
                     $jml_alpha = 0;
+                    $color = "";
                     for($i=1; $i<=$jmlhari ; $i++){
                         $tgl = "tgl_".$i;
+                        $tgl_presensi = $rangetanggal[$i-1];
+                        $search_items = [
+                            'tgl_libur' => $tgl_presensi ];
+                        $ceklibur = cekharilibur($datalibur, $search_items);
                         $datapresensi = explode("|",$r->$tgl);
                         if ($r->$tgl !== NULL){
                             $status = $datapresensi[2];
@@ -118,21 +134,29 @@
 
                         if($status == "h"){
                             $jml_hadir += 1;
+                            $color = "";
                         }
                         if($status == "i"){
                             $jml_izin += 1;
+                            $color = "";
                         }
                         if($status == "s"){
                             $jml_sakit += 1;
+                            $color = "";
                         }
                         if($status == "d"){
                             $jml_hadir += 1;
+                            $color = "";
                         }
                         if(empty($status)){
                             $jml_alpha += 1;
+                            $color = "";
+                        }
+                        if(!empty($ceklibur)){
+                            $color = "red";
                         }
                 ?>
-                <td>
+                <td style = "background-color: {{$color}}">
                     <style>
                         .terlambat-tidak_absen_pulang {
                             display: inline-block;
@@ -154,13 +178,15 @@
                             @endif
                         @else
                             @if($jampulang == "NA")
-                            <span style="color: rgb(241, 230, 13);">✔</span>
-                            @else
                             <span style="color: rgb(13, 241, 13);">✔</span>
+                            @else
+                            <span>✔</span>
                             @endif
                         @endif
                     @else
-                    {{$status}}
+                        @if($ceklibur == null)
+                        {{$status}}
+                        @endif
                     @endif
                 </td>
                 <?php
@@ -169,7 +195,7 @@
             <td>{{ !empty($jml_hadir) ? $jml_hadir : 0}}</td>
             <td>{{ !empty($jml_sakit) ? $jml_sakit : 0}}</td>
             <td>{{ !empty($jml_izin) ? $jml_izin : 0}}</td>
-            <td>{{ !empty($jml_alpha) ? $jml_alpha : 0}}</td>
+            <td>{{ !empty($jml_alpha) ? $jml_alpha - $jumlahlibur : 0}}</td>
     </tr>
     @endforeach
 
@@ -177,11 +203,11 @@
 </table>
 <table class="table" style="margin-top: 10px">
     <tr>
-        <td><span style="color: rgb(13, 241, 13);">✔</span></td>
+        <td>✔</span></td>
         <td>: Absen Lengkap</td>
     </tr>
     <tr>
-        <td><span style="color: rgb(241, 230, 13);">✔</span></td>
+        <td><span style="color: rgb(13, 241, 13);">✔</span></td>
         <td>: Tidak Absen Pulang</td>
     </tr>
     <tr>
@@ -203,8 +229,8 @@
             <br>
             <br>
             <br>
-           <u style="margin-left: 850px"> I Putu Darma Putra, S.Pd </u> <br>
-           <i style="margin-left: 850px"><b>NIP</b></i>
+           <u style="margin-left: 850px">{{$walikelas->nama_wali}} </u> <br>
+           <i style="margin-left: 850px"><b>NIP. {{$walikelas->nip}}</b></i>
         </td>
     </tr>
 </table>

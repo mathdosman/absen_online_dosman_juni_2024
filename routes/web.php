@@ -9,6 +9,7 @@ use App\Http\Controllers\DispenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\IzinabsenController;
 use App\Http\Controllers\IzinsakitController;
 use App\Http\Controllers\IzindispenController;
@@ -61,6 +62,7 @@ Route::middleware(['auth:siswa'])->group(function(){
      //Izizn Absen
      Route::get('/ajuan/izin', [IzinabsenController::class,'rekapizin']);
      Route::get('/izinabsen', [IzinabsenController::class,'create']);
+
 
      Route::get('/izinsakit',[SakitController::class,'create']);
      Route::post('/izinsakit/store',[SakitController::class, 'store']);
@@ -152,9 +154,13 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/presensi/approveizinsakit', [IzinabsenController::class, 'approveizinsakit']);
     Route::get('/presensi/{kode_izin}/batalkanizinsakit', [IzinabsenController::class, 'batalkanizinsakit']);
     Route::post('/ajuan/surat', [IzinabsenController::class, 'berkasajuan']);
+    Route::get('/ajuan/{kode_izin}/delete', [IzinabsenController::class,'deleteadmin']);
 
 
-    // Izin Absen
+    // HARI LIBUR
+    Route::get('/konfigurasi/harilibur', [HariLiburController::class,'index']);
+    Route::post('/konfigurasi/storelibur', [HariLiburController::class,'storelibur']);
+    Route::post('/konfigurasi/libur/{kode_libur}/delete',[HariLiburController::class, 'deletelibur']);
 
 
 

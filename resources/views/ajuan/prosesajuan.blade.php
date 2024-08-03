@@ -189,7 +189,12 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                                     </a>
                                     @endif
+                                    <a href="/ajuan/{{$d->kode_izin}}/delete" class=" delete-confirm btn btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash text-danger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                    </a>
                                 </td>
+
                                    </tr>
                                 @endforeach
                             </tbody>
@@ -234,10 +239,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                    <select name="status_approved" id="status_approved" class="form-select">
+                    <select name="persetujuan" id="persetujuan" class="form-select">
                         <option value="1">Disetujui</option>
                         <option value="2">Ditolak</option>
                     </select>
+                    <div class="row" id="frm_alasan">
+                        <div class=" mb-2 mt-3">
+                            <input type="text" value="" class="form-control" name="alasan_tolak" id="alasan_tolak" placeholder="Alasan tolak (kosongkan jika disetujui)">
+                          </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,6 +271,22 @@
 @push('myscript')
     <script>
         $(function(){
+            function load_alasan(){
+                var persetujuan = $("#persetujuan").val();
+                if(persetujuan == 1){
+                    $("#frm_alasan").hide();
+                    $("#alasan_tolak").removeAttr("required");
+                }else{
+                    $("#frm_alasan").show();
+                    $("#alasan_tolak").attr("required", true);
+                    }
+                }
+
+                $("#frm_alasan").hide();
+                $("#persetujuan").change(function(e){
+                    load_alasan();
+                });
+
             $(".persetujuan").click(function(e){
                 e.preventDefault();
                 var kode_izin = $(this).attr("kode_izin");
@@ -285,10 +311,37 @@
             });
 
             $("#dari, #sampai").datepicker({
-        autoclose: true,
-        todayHighlight: true,
-        format: "yyyy-mm-dd"
+                autoclose: true,
+                todayHighlight: true,
+                format: "yyyy-mm-dd"
         });
+
+        $(".delete-confirm").click(function(e){
+                var url = $(this).attr('href');
+                e.preventDefault();
+                Swal.fire({
+                title: "Anda yakin?",
+                text: "Data akan dihapus secara permanen!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, hapus data!"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                    Swal.fire({
+                    title: "Terhapus!",
+                    text: "Data telah terhapus.",
+                    icon: "success"
+                    });
+                }
+                });
+            });
+
+
+
+
         });
     </script>
 @endpush

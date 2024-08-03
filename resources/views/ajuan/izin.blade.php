@@ -142,6 +142,8 @@
                                 <span class="badge bg-success">Disetujui</span>
                                 @elseif ($d->status_approved == 2)
                                 <span class="badge bg-danger">Ditolak</span>
+                                <br>
+                                <p class=""><i>{{$d->alasan_tolak}}</i>,<br> <span class="text-warning">hapus ajuan terlebih dahulu jika ingin memperbaiki ajuan, terimakasih</span></p>
                             @endif
                         </div>
                     </div>
@@ -214,7 +216,7 @@
                 var kode_izin = $(this).attr("kode_izin");
                 var status_approved = $(this).attr("status_approved");
 
-                if(status_approved == 1 || status_approved == 2)
+                if(status_approved == 1)
                 {
                     Swal.fire({
                             title: "Oops !!",
@@ -225,7 +227,6 @@
                     $("#showact").load('/izin/'+kode_izin+'/showact');
                 }
             });
-
 
             $("#frmdataizin").submit(function(){
                 var bulan = $("#bulan").val();

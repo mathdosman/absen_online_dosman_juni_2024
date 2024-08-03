@@ -139,6 +139,10 @@ class MonitoringController extends Controller
         $sampai = date("Y-m-t",strtotime($dari));
         $namabulan =["","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
+
+        $datalibur = getlibur($dari, $sampai);
+        $jumlahlibur = count($datalibur);
+
         $select_date = "";
         $field_date = "";
         $i = 1;
@@ -201,7 +205,10 @@ class MonitoringController extends Controller
             //Mendefiniskikan nama file ekspor "hasil-export.xls"
             header("Content-Disposition:attachment; filename=Rekap Absensi $time.xls");
         }
-        return view('cetak.cetaklaporankelas',compact('namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari'));
+
+        $walikelas = DB::table('wali')->where('kode_kelas',$kode_kelas)->first();
+
+        return view('cetak.cetaklaporankelas',compact('jumlahlibur','datalibur','namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari','walikelas'));
     }
 
 }

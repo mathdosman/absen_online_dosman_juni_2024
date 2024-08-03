@@ -112,6 +112,9 @@
                   <a class="dropdown-item {{ request()-> is(['konfigurasi/lokasi']) ? 'active text-warning' : ''}}" href="/konfigurasi/lokasi">
                     Lokasi dan radius
                   </a>
+                  <a class="dropdown-item {{ request()-> is(['konfigurasi/harilibur']) ? 'active text-warning' : ''}}" href="/konfigurasi/harilibur">
+                    Hari Libur
+                  </a>
                 </div>
               </div>
             </div>
