@@ -44,7 +44,7 @@ class IzinabsenController extends Controller
     public function izinsakit(Request $request)
     {
         $query = Pengajuanizin::query();
-        $query ->select('kode_izin','tgl_izin_dari','status','tgl_izin_sampai','pengajuan_izin.nisn','nama_siswa','kode_kelas','status_approved','keterangan','doc_sid');
+        $query ->select('kode_izin','tgl_izin_dari','status','tgl_izin_sampai','pengajuan_izin.nisn','nama_siswa','kode_kelas','status_approved','keterangan','doc_sid','alasan_tolak');
         $query -> join('siswa','pengajuan_izin.nisn','=','siswa.nisn');
 
         if(!empty($request->dari) && !empty($request->sampai)){
@@ -444,7 +444,8 @@ class IzinabsenController extends Controller
 
     public function deleteadmin($kode_izin){
         $delete = DB::table('pengajuan_izin')->where('kode_izin',$kode_izin)->delete();
-        if($delete){
+        $dlete = DB::table('presensi')->where('kode_izin',$kode_izin)->delete();
+        if($delete || $dlete){
             return Redirect::back()->with(['success'=>'Data Berhasil Dihapus']);
         } else {
             return Redirect::back()->with(['error'=>'Data Gagal Dihapus']);
