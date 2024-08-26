@@ -61,7 +61,18 @@
 }
 
 </style>
-
+<style>
+    .terlambat-tidak_absen_pulang {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%; /* Membuat bentuk lingkaran */
+        background-color: red; /* Warna latar belakang hijau */
+        text-align: center;
+        line-height: 18px; /* Menyesuaikan posisi vertikal teks */
+        color:white; /* Warna teks (putih agar terlihat jelas di latar hijau) */
+        }
+</style>
 </head>
 
 <!-- Set "A5", "A4" or "A3" for class name -->
@@ -103,7 +114,7 @@
             @if ($d != null)
                 <th>{{date('d',strtotime($d))}}</th>
             @endif
-
+        {{-- {{dd($rangetanggal)}} --}}
        @endforeach
     </tr>
     @foreach ($rekap as $r)
@@ -131,7 +142,6 @@
                         } else {
                             $status = "";
                         }
-
                         if($status == "h"){
                             $jml_hadir += 1;
                             $color = "";
@@ -146,7 +156,7 @@
                         }
                         if($status == "d"){
                             $jml_hadir += 1;
-                            $color = "";
+                            // $color = "";
                         }
                         if(empty($status)){
                             $jml_alpha += 1;
@@ -157,18 +167,7 @@
                         }
                 ?>
                 <td style = "background-color: {{$color}}">
-                    <style>
-                        .terlambat-tidak_absen_pulang {
-                            display: inline-block;
-                            width: 18px;
-                            height: 18px;
-                            border-radius: 50%; /* Membuat bentuk lingkaran */
-                            background-color: red; /* Warna latar belakang hijau */
-                            text-align: center;
-                            line-height: 18px; /* Menyesuaikan posisi vertikal teks */
-                            color:white; /* Warna teks (putih agar terlihat jelas di latar hijau) */
-                            }
-                    </style>
+
                     @if($status=="h")
                         @if($jamdatang > "07:30:00")
                             @if($jampulang == "NA")
@@ -184,9 +183,9 @@
                             @endif
                         @endif
                     @else
-                        @if($ceklibur == null)
-                        {{$status}}
+                        @if($ceklibur !== null)
                         @endif
+                        {{$status}}
                     @endif
                 </td>
                 <?php

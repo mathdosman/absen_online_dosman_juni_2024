@@ -59,6 +59,8 @@ class DashboardController extends Controller
         ->orderBy('tgl_presensi','desc')
         ->get();
 
+        $datalibur = getlibur($awalbulan, $hariini);
+        $jumlahlibur = count($datalibur);
 
         // $rekappresensi = DB::table('presensi')
         // ->selectRaw('COUNT(nisn) as jmlhadir')
@@ -98,11 +100,13 @@ class DashboardController extends Controller
         ->whereBetween('tgl_presensi', [ $awalbulan, $hariini])
         ->count();
 
+
+
         $hadir = $jmlabsen + $ajuandispen;
 
         // $jumHari = cal_days_in_month(CAL_GREGORIAN, 2, 1804);
         $now = date("d")*1;
-        $alpha = $now - $ajuansakit - $ajuanizin - $hadir;
+        $alpha = $now - $ajuansakit - $ajuanizin - $hadir - $jumlahlibur;
 
         return view('dashboard.dashboard',compact('cek','data','siswa','historibulanini','hariini','leaderboard','ajuansakit','ajuanizin','alpha','hadir'));
     }

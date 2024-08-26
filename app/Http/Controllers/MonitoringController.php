@@ -135,7 +135,7 @@ class MonitoringController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $kode_kelas = $request->kode_kelas;
-        $dari = $tahun."-".$bulan."-01";
+        $dari = $tahun."-0".$bulan."-01";
         $sampai = date("Y-m-t",strtotime($dari));
         $namabulan =["","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 

@@ -72,6 +72,7 @@
                         <th class="text-center text-dark !important" style="background-color: rgb(210, 209, 209)" >Jam Pulang</th>
                         <th class="text-center text-dark !important" style="background-color: rgb(210, 209, 209)" >Foto Pulang</th>
                         <th class="text-center text-dark !important" style="background-color: rgb(210, 209, 209)" >Keterangan</th>
+                        <th class="text-center text-dark !important" style="background-color: rgb(210, 209, 209)" ></th>
                     </tr>
                 </thead>
                 <tbody id="loadpresensi" class="text-center">
