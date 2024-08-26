@@ -80,7 +80,7 @@
                                       <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-prompt" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5l-5 5" /><path d="M13 17l6 0" /></svg>
                                     </span>
-                                    <input type="text" value="{{Request('nik')}}" name="nik" id="nik" class="form-control" placeholder="NISN">
+                                    <input type="text" value="{{Request('nisn')}}" name="nisn" id="nisn" class="form-control" placeholder="NISN">
                                     </div>
                             </div>
                             <div class="col-3">
@@ -89,7 +89,7 @@
                                       <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
                                     </span>
-                                    <input type="text" value="{{Request('nama_lengkap')}}" name="nama_lengkap" id="nama_lengkap" class="form-control" placeholder="Nama Siswa">
+                                    <input type="text" value="{{Request('nama_siswa')}}" name="nama_siswa" id="nama_siswa" class="form-control" placeholder="Nama Siswa">
                                     </div>
                             </div>
                             <div class="col-3">
@@ -175,6 +175,8 @@
                                             <span class="badge bg-success text-light">Disetujui</span>
                                             @elseif ($d->status_approved == 2)
                                             <span class="badge bg-danger text-light">Ditolak</span>
+                                            <br>
+                                            <span>{{$d->alasan_tolak}}</span>
                                             @else
                                             <span class="badge bg-warning text-light">Menunggu</span>
                                         @endif
