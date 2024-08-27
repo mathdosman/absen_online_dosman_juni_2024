@@ -19,6 +19,9 @@ class DispenController extends Controller
         $tgl_izin_sampai = $request->tgl_izin_sampai;
         $status = "d";
         $keterangan = $request->keterangan;
+        $request->validate([
+            'sid'=> 'image|mimes:png,jpg',
+        ]);
 
 
         $bulan = date("m",strtotime($tgl_izin_dari));

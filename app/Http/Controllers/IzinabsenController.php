@@ -304,6 +304,9 @@ class IzinabsenController extends Controller
         $tgl_izin_sampai = $request->tgl_izin_sampai;
         $status = "i";
         $keterangan = $request->keterangan;
+        $request->validate([
+            'sid'=> 'image|mimes:png,jpg',
+        ]);
 
         $bulan = date("m",strtotime($tgl_izin_dari));
         $tahun = date("Y",strtotime($tgl_izin_dari));
