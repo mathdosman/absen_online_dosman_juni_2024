@@ -85,6 +85,7 @@
         </div>
     </div>
 </div>
+{{-- DARI SINI TOMBOL --}}
 <div class="section mt-2" id="presence-section">
     <div class="todaypresence">
         <div class="row justify-content-center">
@@ -145,7 +146,11 @@
                                     @php
                                         $path = Storage::url('uploads/absensi/'.$data->foto_in);
                                     @endphp
+                                    @if($data->foto_in == Null)
+                                    <img src="{{asset('assets/img/sample/avatar/avatar2.jpg')}}" class="imaged w64" alt="xxxx">
+                                    @else
                                     <img src="{{url($path)}}" alt="image" class="imaged w64">
+                                    @endif
                                     @else
                                     <ion-icon name="camera"></ion-icon>
                                     @endif

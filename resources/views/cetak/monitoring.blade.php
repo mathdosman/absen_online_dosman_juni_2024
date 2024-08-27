@@ -32,7 +32,7 @@
                                         <input type="text" value="{{ date("Y-m-d")}}" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal Absen" autocomplete="off">
                                 </div>
                             </div>
-                                <div class="col-4">
+                                {{-- <div class="col-4">
                                     <div class="input-icon mb-3">
                                         <select name="kode_lokasi" id="kode_lokasi" class="form-select" required>
                                             <option value="">Lokasi</option>
@@ -41,7 +41,7 @@
                                             @endforeach
                                         </select>
                                       </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-4">
                                     <div class="input-icon mb-3">
                                         <select name="kode_kelas" id="kode_kelas" class="form-select" required>
@@ -53,6 +53,22 @@
                                       </div>
                                 </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col">
+                        @if(Session::get('success'))
+                            <div class="alert alert-success">
+                                {{ Session::get('success') }}
+                            </div>
+                            @endif
+                            @if(Session::get('error'))
+                            <div class="alert alert-warning">
+                                {{ Session::get('error') }}
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -107,6 +123,20 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="loadfoto_out">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {{-- ======================================================================================= --}}
+  <div class="modal modal-blur fade" id="modalkoreksipresensi" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Koreksi Presensi</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="loadkoreksipresensi">
 
         </div>
       </div>

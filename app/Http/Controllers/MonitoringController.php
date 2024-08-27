@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class MonitoringController extends Controller
 {
@@ -58,7 +59,7 @@ class MonitoringController extends Controller
         // ->join('kelas','siswa.kode_kelas','=','kelas.kode_kelas')
         // ->where('tgl_presensi',$tanggal)
         // ->get();
-        return view('cetak.getpresensi',compact('presensi'));
+        return view('cetak.getpresensi',compact('presensi','tanggal'));
     }
 
     public function foto_in(Request $request)
@@ -211,4 +212,33 @@ class MonitoringController extends Controller
         return view('cetak.cetaklaporankelas',compact('jumlahlibur','datalibur','namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari','walikelas'));
     }
 
+    public function koreksipresensi(Request $request){
+        $nisn = $request->nisn;
+        $tanggal = $request->tanggal;
+        $siswa = DB::table('siswa')->where('nisn',$nisn)->first();
+        $jamsekolah = DB::table('jam_sekolah')->orderBy('kode_jam')->get();
+        return view('cetak.koreksipresensi', compact('siswa','tanggal','jamsekolah'));
+    }
+
+    public function storekoreksipresensi(Request $request){
+        $nisn = $request->nisn;
+        $tanggal = $request->tanggal;
+        $jam_in = $request->jam_in;
+        $jam_out = $request->jam_out;
+        $kode_jam = $request->kode_jam;
+
+        try{
+            DB::table('presensi')->insert([
+                'nisn'=>$nisn,
+                'tgl_presensi'=>$tanggal,
+                'jam_in'=>$jam_in,
+                'jam_out'=>$jam_out,
+                'kode_jam' =>$kode_jam,
+                'status' => "h"
+            ]);
+            return Redirect::back()->with(['success'=>'Data Berhasil di Simpan']);
+        }catch(\Throwable $th){
+            return Redirect::back()->with(['error'=>'Data Gagal di Simpan']);
+        }
+    }
 }

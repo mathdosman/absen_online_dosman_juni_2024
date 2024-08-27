@@ -162,6 +162,8 @@ Route::middleware(['auth:user'])->group(function(){
     Route::post('/konfigurasi/storelibur', [HariLiburController::class,'storelibur']);
     Route::post('/konfigurasi/libur/{kode_libur}/delete',[HariLiburController::class, 'deletelibur']);
 
+    Route::post('/koreksipresensi', [MonitoringController::class,'koreksipresensi']);
+    Route::post('/storekoreksipresensi', [MonitoringController::class,'storekoreksipresensi']);
 
 
 
