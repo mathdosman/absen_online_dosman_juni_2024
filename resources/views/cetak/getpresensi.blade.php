@@ -16,7 +16,7 @@ function selisih($jam_masuk, $jam_keluar)
 @endphp
 
 @foreach ($presensi as $d)
-@if($d->status == "h")
+@if($d->status == "h" || $d->status == "m")
             @php
                 $foto_in = Storage ::url('uploads/absensi/'.$d->foto_in);
                 $foto_out = Storage ::url('uploads/absensi/'.$d->foto_out);

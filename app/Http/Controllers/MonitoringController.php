@@ -230,7 +230,6 @@ class MonitoringController extends Controller
         $nisn = $request->nisn;
         $tanggal = $request->tanggal;
         $jam_in = $request->jam_in;
-        $jam_out = $request->jam_out;
         $kode_jam = $request->kode_jam;
 
         try{
@@ -238,9 +237,8 @@ class MonitoringController extends Controller
                 'nisn'=>$nisn,
                 'tgl_presensi'=>$tanggal,
                 'jam_in'=>$jam_in,
-                'jam_out'=>$jam_out,
                 'kode_jam' =>$kode_jam,
-                'status' => "h"
+                'status' => "m"
             ]);
             return Redirect::back()->with(['success'=>'Data Berhasil di Simpan']);
         }catch(\Throwable $th){

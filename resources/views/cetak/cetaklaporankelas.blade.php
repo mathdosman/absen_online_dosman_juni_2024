@@ -11,6 +11,8 @@
 
   <!-- Load paper.css for happy printing -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
   <!-- Set page size here: A5, A4 or A3 -->
   <!-- Set also "landscape" if you need -->
@@ -182,6 +184,12 @@
                             <span>✔</span>
                             @endif
                         @endif
+                    @elseif($status == "m")
+                        @if($jampulang == "NA")
+                            <span><ion-icon style="color: rgb(219, 53, 11)" name="flag"></ion-icon></span>
+                        @else
+                            <span><ion-icon style="color: rgb(0, 26, 255)" name="flag"></ion-icon></span>
+                        @endif
                     @else
                         @if($ceklibur !== null)
                         @endif
@@ -216,6 +224,14 @@
     <tr>
         <td><span class="terlambat-tidak_absen_pulang">✔</span></td>
         <td>: Terlambat dan Tidak Absen Pulang</td>
+    </tr>
+    <tr>
+        <td><span><ion-icon style="color: rgb(219, 53, 11)" name="flag"></ion-icon></span></td>
+        <td>: Presensi <b>Admin</b> dan tidak absen Pulang</td>
+    </tr>
+    <tr>
+        <td><span><ion-icon style="color: rgb(0, 26, 255)" name="flag"></ion-icon></span></td>
+        <td>: Presensi <b>Admin</b> Lengkap</td>
     </tr>
 
 </table>
