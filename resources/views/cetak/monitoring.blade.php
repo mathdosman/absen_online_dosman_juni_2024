@@ -23,7 +23,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="input-icon mb-3">
                                         <span class="input-icon-addon" >
                                           <!-- Download SVG icon from http://tabler-icons.io/i/user -->
@@ -32,17 +32,12 @@
                                         <input type="text" value="{{ date("Y-m-d")}}" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal Absen" autocomplete="off">
                                 </div>
                             </div>
-                                {{-- <div class="col-4">
+                                <div class="col-3">
                                     <div class="input-icon mb-3">
-                                        <select name="kode_lokasi" id="kode_lokasi" class="form-select" required>
-                                            <option value="">Lokasi</option>
-                                            @foreach ($lokasi as $d)
-                                            <option  value="{{$d->kode_lokasi }}">({{strtoupper($d->kode_lokasi)}}) {{$d->nama_lokasi}}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" class="form-control" placeholder="Nama Siswa" name="nama_siswa" id="nama_siswa" value="{{Request('nama_siswa') }}">
                                       </div>
-                                </div> --}}
-                                <div class="col-4">
+                                </div>
+                                <div class="col-3">
                                     <div class="input-icon mb-3">
                                         <select name="kode_kelas" id="kode_kelas" class="form-select" required>
                                             <option value="">Kelas</option>
@@ -51,6 +46,13 @@
                                             @endforeach
                                         </select>
                                       </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <a href="/cetak/monitoring" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                        Reset</a>
+                                    </div>
                                 </div>
                     </div>
 
@@ -155,7 +157,7 @@
 
         function loadpresensi(){
             var tanggal = $("#tanggal").val();
-            var kode_lokasi = $("#kode_lokasi").val();
+            var nama_siswa = $("#nama_siswa").val();
             var kode_kelas = $("#kode_kelas").val();
 
             $.ajax({
@@ -164,7 +166,7 @@
                 data:{
                     _token:"{{csrf_token()}}",
                     tanggal: tanggal,
-                    kode_lokasi : kode_lokasi,
+                    nama_siswa : nama_siswa,
                     kode_kelas : kode_kelas
                 },
                 cache:false,
@@ -177,7 +179,7 @@
         $("#tanggal").change(function(e){
             loadpresensi();
         });
-        $("#kode_lokasi").change(function(e){
+        $("#nama_siswa").change(function(e){
             loadpresensi();
         });
         $("#kode_kelas").change(function(e){

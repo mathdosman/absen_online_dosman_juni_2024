@@ -12,9 +12,10 @@ class MonitoringController extends Controller
 {
     public function monitoring()
     {
+        $siswa = DB::table('siswa')->get();
         $lokasi = DB::table('lokasi')->orderBy('kode_lokasi')->get();
         $kelas = DB::table('kelas')->orderBy('kode_kelas')->get();
-        return view('cetak.monitoring',compact('lokasi','kelas'));
+        return view('cetak.monitoring',compact('lokasi','kelas','siswa'));
     }
 
     public function getpresensi(Request $request)
@@ -25,6 +26,10 @@ class MonitoringController extends Controller
         $tanggal = $request->tanggal;
 
         $query = Siswa::query();
+        $query -> select('siswa.*');
+        if(!empty($request ->nama_siswa)){
+            $query -> where('nama_siswa', 'like', '%'. $request ->nama_siswa.'%');
+        }
         $query->selectRaw('siswa.nisn,nama_siswa,siswa.kode_kelas,siswa.kode_lokasi, datapresensi.id, jam_in, jam_out, foto_in, foto_out, lokasi_in, lokasi_out, datapresensi.status, bel_sekolah, nama_jam, start_pulang, keterangan,  tgl_izin_dari, tgl_izin_sampai');
         $query->leftJoin(
             DB::raw("(
