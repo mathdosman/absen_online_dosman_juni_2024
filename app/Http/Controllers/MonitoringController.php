@@ -221,6 +221,7 @@ class MonitoringController extends Controller
         $nisn = $request->nisn;
         $tanggal = $request->tanggal;
         $siswa = DB::table('siswa')->where('nisn',$nisn)->first();
+
         $jamsekolah = DB::table('jam_sekolah')->orderBy('kode_jam')->get();
         return view('cetak.koreksipresensi', compact('siswa','tanggal','jamsekolah'));
     }
