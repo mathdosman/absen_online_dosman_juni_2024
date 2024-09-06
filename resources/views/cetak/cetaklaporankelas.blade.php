@@ -173,7 +173,8 @@
                     @if($status=="h")
                         @if($jamdatang > "07:30:00")
                             @if($jampulang == "NA")
-                            <span class="terlambat-tidak_absen_pulang">✔</span>
+                            <span><ion-icon style="color:red" name="alert-circle-outline"></ion-icon></span>
+                            {{-- <span class="terlambat-tidak_absen_pulang">✔</span> --}}
                             @else
                             <span style="color: red ;">✔</span>
                             @endif
@@ -192,6 +193,7 @@
                         @endif
                     @else
                         @if($ceklibur !== null)
+                        {{-- <span><ion-icon name="storefront"></ion-icon></span> --}}
                         @endif
                         {{$status}}
                     @endif
@@ -208,47 +210,56 @@
 
 
 </table>
-<table class="table" style="margin-top: 10px">
-    <tr>
-        <td>✔</span></td>
-        <td>: Absen Lengkap</td>
-    </tr>
-    <tr>
-        <td><span style="color: rgb(13, 241, 13);">✔</span></td>
-        <td>: Tidak Absen Pulang</td>
-    </tr>
-    <tr>
-        <td><span style="color: red ;">✔</span></td>
-        <td>: Datang Terlambat</td>
-    </tr>
-    <tr>
-        <td><span class="terlambat-tidak_absen_pulang">✔</span></td>
-        <td>: Terlambat dan Tidak Absen Pulang</td>
-    </tr>
-    <tr>
-        <td><span><ion-icon style="color: rgb(219, 53, 11)" name="flag"></ion-icon></span></td>
-        <td>: Presensi <b>Admin</b> dan tidak absen Pulang</td>
-    </tr>
-    <tr>
-        <td><span><ion-icon style="color: rgb(0, 26, 255)" name="flag"></ion-icon></span></td>
-        <td>: Presensi <b>Admin</b> Lengkap</td>
-    </tr>
-
-</table>
-<table width="100%" style="margin-top: 80px" >
+<table width="100%" style="margin-top: 40px" >
     <tr>
         <td style="text-align: left">
-            <span style="margin-left: 850px;">Gianyar, {{date('d-m-Y')}}</span>
-            <span style="margin-left: 850px;">Wali Kelas</span>
+            <span style="margin-left: 650px;">Gianyar, {{date('d-m-Y')}}</span>
+            <span style="margin-left: 650px;">Wali Kelas</span>
             <br>
             <br>
             <br>
             <br>
-           <u style="margin-left: 850px">{{$walikelas->nama_wali}} </u> <br>
-           <i style="margin-left: 850px"><b>NIP. {{$walikelas->nip}}</b></i>
+           <u style="margin-left: 650px">{{$walikelas->nama_wali}} </u> <br>
+           <i style="margin-left: 650px"><b>NIP. {{$walikelas->nip}}</b></i>
         </td>
     </tr>
 </table>
+
+        <table class="table" style="margin-top: 10px; border-style: dotted; padding: 3px">
+            <tr>
+                <td>✔</span></td>
+                <td>: Absen Lengkap</td>
+            </tr>
+            <tr>
+                <td><span style="color: rgb(13, 241, 13);">✔</span></td>
+                <td>: Tidak Absen Pulang</td>
+            </tr>
+            <tr>
+                <td><span style="color: red ;">✔</span></td>
+                <td>: Datang Terlambat</td>
+            </tr>
+            <tr>
+                <td><span><ion-icon style="color:red" name="alert-circle-outline"></ion-icon></span></td>
+                <td>: Terlambat dan Tidak Absen Pulang</td>
+            </tr>
+            <tr>
+                <td><span><ion-icon style="color: rgb(219, 53, 11)" name="flag"></ion-icon></span></td>
+                <td>: Presensi <b>Admin</b> dan tidak absen Pulang</td>
+            </tr>
+            <tr>
+                <td><span><ion-icon style="color: rgb(0, 26, 255)" name="flag"></ion-icon></span></td>
+                <td>: Presensi <b>Admin</b> Lengkap</td>
+            </tr>
+            @foreach ($harilibur as $d)
+                <tr>
+                    <td style="color: red">{{tgl_indo($d->tgl_libur)}}</td>
+                    <td style="color: red"> : {{$d->keterangan}}</td>
+                </tr>
+            @endforeach
+        </table>
+
+
+
 
   </section>
 

@@ -32,6 +32,7 @@ class HariLiburController extends Controller
                 'keterangan' => $keterangan
             ];
                 $simpan = DB::table('hari_libur')->insert($data);
+                $delete_presensi = DB::table('presensi')->where('tgl_presensi',$tgl_libur)->delete();
                 return Redirect::back()->with(['success'=>'Data Berhasil Disimpan']);
                 } catch (\Exception $e){
                 return Redirect::back()->with(['error'=>'Data Gagal Disimpan']);

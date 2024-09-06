@@ -174,6 +174,7 @@ class MonitoringController extends Controller
 
         $jmlhari = count($rangetanggal);
         $lastrange = $jmlhari - 1;
+
         $sampai = $rangetanggal[$lastrange];
 
                 $query = Siswa::query();
@@ -212,9 +213,17 @@ class MonitoringController extends Controller
             header("Content-Disposition:attachment; filename=Rekap Absensi $time.xls");
         }
 
-        $walikelas = DB::table('wali')->where('kode_kelas',$kode_kelas)->first();
+        $awalbulan =date("Y-0".$bulan."-01");
+        $akhirbulan = date("Y-0".$bulan."-".$jmlhari);
 
-        return view('cetak.cetaklaporankelas',compact('jumlahlibur','datalibur','namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari','walikelas'));
+        $walikelas = DB::table('wali')->where('kode_kelas',$kode_kelas)->first();
+        $harilibur = DB::table('hari_libur')
+        ->whereBetween('tgl_libur', [ $awalbulan, $akhirbulan])
+        ->orderBy('tgl_libur')->get();
+
+        // dd($harilibur);
+
+        return view('cetak.cetaklaporankelas',compact('jumlahlibur','datalibur','namabulan','bulan','tahun','rekap','kode_kelas','rangetanggal','jmlhari','walikelas','harilibur'));
     }
 
     public function koreksipresensi(Request $request){

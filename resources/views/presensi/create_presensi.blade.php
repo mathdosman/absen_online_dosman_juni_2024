@@ -67,12 +67,6 @@
     <p>Jadwal : {{date("H:i",strtotime($jamsekolah->start_datang))}} s/d {{date("H:i",strtotime($jamsekolah->end_datang))}}</p>
     <p>Pulang : {{date("H:i",strtotime($jamsekolah->start_pulang))}}</p>
 </div>
-
-<div class="row mt-2">
-    <div class="col">
-        <div id="map"></div>
-    </div>
-</div>
 <div class="container">
     <div class="row">
         <div class="col">
@@ -81,11 +75,16 @@
             @else
             <button id="takeabsen" class="btn  btn-primary  btn-block"><ion-icon name="camera-outline"></ion-icon> ABSEN MASUK</button>
             @endif
-
         </div>
     </div>
 </div>
 
+<div class="row mt-2">
+    <div class="col">
+        <div id="map"></div>
+    </div>
+</div>
+<section style="margin-bottom: 75px"></section>
 <audio id="notifikasi_in">
     <source src="{{asset('assets/audio/notifikasi_in.mp3')}}" type="audio/mpeg">
 </audio>

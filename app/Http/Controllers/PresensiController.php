@@ -206,6 +206,7 @@ class PresensiController extends Controller
                     'kode_jam'=>$jamsekolah->kode_jam
                 ];
                 $simpan = DB::table('presensi')->insert($data);
+                $simpan_copy = DB::table('presensi_copy')->insert($data);
                 if($simpan){
                     echo "success|Absen Berhasil, Selamat Belajar!|in";
                     Storage::put($file, $image_base64);

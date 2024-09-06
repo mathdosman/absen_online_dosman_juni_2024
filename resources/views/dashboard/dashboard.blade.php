@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="presencedetail" style="margin-left:0.2rem">
                                     <h4 class="presencetitle">Masuk</h4>
-                                    <span>{{$data!=null ? $data->jam_in : 'Belum Absen'}}</span>
+                                    <span style="font-size: 0.8rem">{{$data!=null ? $data->jam_in : 'Belum Absen'}}</span>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                                 </div>
                                 <div class="presencedetail" style="margin-left:0.2rem">
                                     <h4 class="presencetitle">Pulang</h4>
-                                    <span><span style="font-size: 0.8rem">{{$data !== null ? $data->jam_out : "Belum Absen"}}</span>
+                                    <span style="font-size: 0.8rem">{{$data !== null ? $data->jam_out : "Belum Absen"}}</span>
                                 </div>
                             </div>
                         </div>
