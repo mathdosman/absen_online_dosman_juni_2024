@@ -165,27 +165,27 @@ class PresensiController extends Controller
                     if($update){
                         echo "success|Absen Berhasil, Hati-hati dijalan!|out";
                         Storage::put($file, $image_base64);
+                        $datafoto = DB::table('presensi')->where('nisn',$nisn)->where('tgl_presensi',$tgl_presensi)->first();
+                        $cekfoto_out = Storage::url('uploads/absensi/'.$datafoto->foto_out);
 
-                        $curl = curl_init();
+                    $curl = curl_init();
 
-                    curl_setopt_array($curl, array(
-                    CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => array('message' => 'Terima Kasih Sudah Melakukan Absen Pulang, '.$datasiswa->nama_siswa.' melakukan Absen pada Jam '.$jam ,'number' => $no_hp,'file_dikirim'=>''),
-                    ));
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => array('message' => tgl_indo($tgl_presensi).", *".$datasiswa->nama_siswa."* melakukan presensi *PULANG* pada pukul ".$jam.". \nCek foto presensi melalui link berikut :\n".url($cekfoto_out)."\n_Admin Presensi SMAN 1 Gianyar_" ,'number' => $no_hp,'file_dikirim'=>''),
+                ));
 
-                    $response = curl_exec($curl);
+                $response = curl_exec($curl);
 
-                    curl_close($curl);
-                    // echo $response;
-
-
+                curl_close($curl);
+                // echo $response;
                     }else{
                         echo "error|Maaf Gagal Absen, Hubungi Tim IT|out";
                     }
@@ -206,12 +206,14 @@ class PresensiController extends Controller
                     'kode_jam'=>$jamsekolah->kode_jam
                 ];
                 $simpan = DB::table('presensi')->insert($data);
-                $simpan_copy = DB::table('presensi_copy')->insert($data);
                 if($simpan){
                     echo "success|Absen Berhasil, Selamat Belajar!|in";
                     Storage::put($file, $image_base64);
 
-                    $curl = curl_init();
+                        $datafoto = DB::table('presensi')->where('nisn',$nisn)->where('tgl_presensi',$tgl_presensi)->first();
+                            $cekfoto_in = Storage::url('uploads/absensi/'.$datafoto->foto_in);
+
+                        $curl = curl_init();
 
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => 'https://wadosman.sman1-gianyar.sch.id/send-message',
@@ -222,7 +224,7 @@ class PresensiController extends Controller
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => array('message' => 'Terima Kasih Sudah Melakukan Absen Masuk, '.$datasiswa->nama_siswa.' melakukan Absen pada Jam '.$jam ,'number' => $no_hp,'file_dikirim'=>''),
+                    CURLOPT_POSTFIELDS => array('message' => tgl_indo($tgl_presensi).", \n*".$datasiswa->nama_siswa."* melakukan presensi *HADIR* pada pukul ".$jam.". \nCek foto presensi melalui link berikut :\n".url($cekfoto_in)."\n_Admin Presensi SMAN 1 Gianyar_" ,'number' => $no_hp,'file_dikirim'=>''),
                     ));
 
                     $response = curl_exec($curl);
