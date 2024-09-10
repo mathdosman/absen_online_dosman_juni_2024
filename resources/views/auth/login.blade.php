@@ -16,6 +16,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('assets/img/icon/192x192.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="manifest" href="__manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 </head>
 
 <body class="bg-white">
@@ -61,9 +62,10 @@
                     <div class="form-group boxed">
                         <div class="input-wrapper">
                             <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                            <i class="clear-input">
+                            <i id="eye" class="fa fa-eye"></i>
+                            {{-- <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
-                            </i>
+                            </i> --}}
                         </div>
                     </div>
 
@@ -95,6 +97,7 @@
     <script src="{{asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
     <!-- Base Js File -->
     <script src="{{asset('assets/js/base.js')}}"></script>
+    <script src="{{asset('login/app.js')}}"></script>
 
 
 </body>
