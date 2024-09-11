@@ -1,5 +1,6 @@
 @extends('layouts.presensi')
 @section('header')
+
     <!-- App Header -->
     <div class="appHeader bg-primary text-light">
         <div class="left">
@@ -52,7 +53,7 @@
             </div>
             <div class="form-group boxed">
                 <div class="input-wrapper">
-                    <input type="password" class="form-control" name="password" placeholder="Password" autocomplete="off">
+                    <input type="text" class="form-control" name="password" placeholder="Password" autocomplete="off">
                 </div>
             </div>
             <div class="custom-file-upload border" id="fileUpload1">
@@ -77,3 +78,4 @@
         </div>
     </form>
 @endsection
+

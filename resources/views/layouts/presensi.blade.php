@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="manifest" href="__manifest.json">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
 </head>
 
 <body style="background-color:#e9ecef;">
