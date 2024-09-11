@@ -82,7 +82,11 @@ class PresensiController extends Controller
             return view('presensi.notifjadwal', compact('status'));
         }else{
             if(!empty($status) && $status->status !== "h"){
-                return view('presensi.notifjadwal', compact('status'));
+                if($status->status == "m"){
+                    return view('presensi.create_presensi', compact('cek','lok_sekolah','jamsekolah'));
+                }else{
+                    return view('presensi.notifjadwal', compact('status'));
+                }
             }else{
                 if($jamsekolah == null){
                     return view('presensi.notifjadwal', compact('status'));

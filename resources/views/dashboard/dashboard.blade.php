@@ -317,10 +317,60 @@
     </div>
 </div>
 
+{{-- SETTINGAN POP UP DARI BAGIAN INI --}}
+<style>
+    .popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background-color: #f1d21e;
+  border: 1px solid #ff0000;
+  padding: 20px;
+  z-index: 999;
+}
+
+.close {
+  color: #000000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+
+<div id="popup" class="popup">
+    <span class="close">&times;</span>
+    <input id="fotoo" type="hidden" value="{{Auth::guard('siswa')->user()->foto}}">
+    <h2 class="text-dark">Harap segera perbarui foto profil Anda dengan menggunakan pakaian seragam sekolah dengan latar belakang merah. <br> <br> Notifikasi ini akan hilang setelah Anda melakukan perubahan.</h2>
+</div>
+{{-- SETTINGAN POPUP SAMPAI SINI --}}
 @endsection
 
 @push('myscript')
     <script>
+            const popup = document.getElementById('popup');
+            const close = document.querySelector('.close');
+            const fotoInput = document.getElementById('fotoo');
+
+            window.onload = function() {
+                // Cek apakah input file kosong
+                if (!fotoInput.value) {
+                popup.style.display = 'block';
+
+                // Sembunyikan pop up setelah 5 detik
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 15000);
+                }
+            };
+
+            // Sembunyikan pop up saat tombol tutup diklik
+            close.onclick = function() {
+                popup.style.display = 'none';
+            };
+
         $("#absenmasuk").click(function(e){
             Swal.fire({
             title: "Anda sudah melakukan absen Masuk",
@@ -339,5 +389,7 @@
             icon: "success"
             });
         });
+
+
     </script>
 @endpush
